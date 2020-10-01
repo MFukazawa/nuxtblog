@@ -1,4 +1,5 @@
 require('dotenv').config()
+const bodyParser = require('body-parser')
 
 export default {
   /*
