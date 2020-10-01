@@ -1,5 +1,6 @@
-import Vuex from 'vuex'
-import axios from 'axios'
+import Vuex from "vuex";
+import axios from "axios";
+import Cookie from "js-cookie";
 
 const createStore = () => {
   return new Vuex.Store({
@@ -9,35 +10,36 @@ const createStore = () => {
     },
     mutations: {
       setPosts(state, posts) {
-        state.loadedPosts = posts
+        state.loadedPosts = posts;
       },
       addPost(state, post) {
-        state.loadedPosts.push(post)
+        state.loadedPosts.push(post);
       },
       editPost(state, editedPost) {
-        const postIndex = state.loadedPosts.findIndex(post =>
-          post.id === editedPost.id
-        )
-        state.loadedPosts[postIndex] = editedPost
+        const postIndex = state.loadedPosts.findIndex(
+          post => post.id === editedPost.id
+        );
+        state.loadedPosts[postIndex] = editedPost;
       },
       setToken(state, token) {
-        state.token = token
+        state.token = token;
       },
       clearToken(state) {
-        state.token = null
+        state.token = null;
       }
     },
     actions: {
       nuxtServerInit({ commit }, context) {
-        return axios.get('https://nuxt-blog-86397.firebaseio.com/posts.json')
+        return axios
+          .get("https://nuxt-blog-86397.firebaseio.com/posts.json")
           .then(res => {
-            const postsArray = []
+            const postsArray = [];
             for (const key in res.data) {
-              postsArray.push({ ...res.data[key], id: key })
+              postsArray.push({ ...res.data[key], id: key });
             }
-            commit('setPosts', postsArray)
+            commit("setPosts", postsArray);
           })
-          .catch(e => context.error(e))
+          .catch(e => context.error(e));
         // If running on server
         // if (!process.client) {
         //   console.log(context.req)
@@ -66,73 +68,130 @@ const createStore = () => {
         const createdPost = {
           ...post,
           updatedDate: new Date()
-        }
+        };
         return axios
-        .post('https://nuxt-blog-86397.firebaseio.com/posts.json?auth=' + state.token, createdPost)
-        .then(result => {
-          commit('addPost', {...createdPost, id: result.data.name})
-        })
-        .catch(e => console.log(e))
+          .post(
+            "https://nuxt-blog-86397.firebaseio.com/posts.json?auth=" +
+              state.token,
+            createdPost
+          )
+          .then(result => {
+            commit("addPost", { ...createdPost, id: result.data.name });
+          })
+          .catch(e => console.log(e));
       },
       editPost({ state, commit }, editedPost) {
-        return axios.put('https://nuxt-blog-86397.firebaseio.com/posts/' +
-          editedPost.id + '.json?auth=' + state.token, editedPost)
-        .then(res => {
-          commit('editPost', editedPost)
-        })
-        .catch(e => console.log(e))
+        return axios
+          .put(
+            "https://nuxt-blog-86397.firebaseio.com/posts/" +
+              editedPost.id +
+              ".json?auth=" +
+              state.token,
+            editedPost
+          )
+          .then(res => {
+            commit("editPost", editedPost);
+          })
+          .catch(e => console.log(e));
       },
       setPosts({ commit }, posts) {
-        commit('setPosts', posts)
+        commit("setPosts", posts);
       },
       authenticateUser({ commit, dispatch }, authData) {
         // sign in
-        let authUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + process.env.apiKey
+        let authUrl =
+          "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" +
+          process.env.apiKey;
 
         // sign up
         if (!authData.isLogin) {
-          authUrl ='https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + process.env.apiKey
+          authUrl =
+            "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" +
+            process.env.apiKey;
         }
 
-        return axios.post(authUrl, {
-          email: authData.email,
-          password: authData.password,
-          returnSecureToken: true
-        })
-        .then(res => {
-          commit('setToken', res.data.idToken)
-          localStorage.setItem('token', res.data.idToken)
-          localStorage.setItem('tokenExpiration', new Date().getTime() + res.expiresIn * 1000)
-          dispatch('setLogoutTimer', res.data.expiresIn * 1000)
-        })
-        .catch(e => console.log(e))
+        return axios
+          .post(authUrl, {
+            email: authData.email,
+            password: authData.password,
+            returnSecureToken: true
+          })
+          .then(res => {
+            let expirationSeconds = res.data.expiresIn * 1000;
+
+            commit("setToken", res.data.idToken);
+            localStorage.setItem("token", res.data.idToken);
+            localStorage.setItem(
+              "tokenExpiration",
+              new Date().getTime() + Number.parseInt(expirationSeconds)
+            );
+            Cookie.set("jwt", res.data.idToken);
+            Cookie.set(
+              "expirationDate",
+              new Date().getTime() + Number.parseInt(expirationSeconds)
+            );
+          })
+          .catch(e => console.log(e));
       },
-      setLogoutTimer({ commit }, duration) {
-        setTimeout(() => {
-          commit('clearToken')
-        }, duration)
-      },
-      initAuth({ commit, dispatch }) {
-        const token = localStorage.getItem('token')
-        const expirationDate = localStorage.getItem('tokenExpiration')
+      // setLogoutTimer({ commit }, duration) {
+      //   setTimeout(() => {
+      //     commit("clearToken");
+      //   }, duration);
+      // },
+      initAuth({ commit, dispatch }, req) {
+        let token;
+        let expirationDate;
+
+        if (req) {
+          if (!req.headers.cookie) {
+            return;
+          }
+
+          const jwtCookie = req.headers.cookie
+            .split(";")
+            .find(c => c.trim().startsWith("jwt="));
+
+          if (!jwtCookie) {
+            return;
+          }
+
+          token = jwtCookie.split("=")[1];
+          expirationDate = req.headers.cookie
+            .split(";")
+            .find(c => c.trim().startsWith("expirationDate="))
+            .split("=")[1];
+        } else {
+          token = localStorage.getItem("token");
+          expirationDate = localStorage.getItem("tokenExpiration");
+        }
 
         if (new Date().getTime() > +expirationDate || !token) {
+          dispatch('logout')
           return;
         }
 
-        dispatch('setLogoutTimer', +expirationDate - new Date().getTime())
-        commit('setToken', token)
+        commit("setToken", token);
+      },
+      logout({ commit }) {
+        commit("clearToken");
+        Cookie.remove("jwt");
+        Cookie.remove("expirationDate");
+
+        if (process.client) {
+          localStorage.removeItem('token')
+          localStorage.removeItem('tokenExpiration')
+        }
       }
     },
     getters: {
       loadedPosts(state) {
-        return state.loadedPosts
+        return state.loadedPosts;
       },
       isAuthenticated(state) {
-        return state.token != null
+        return state.token != null;
       }
     }
-  })
-}
+  });
+};
 
-export default createStore
+export default createStore;
