@@ -65,11 +65,10 @@ export default {
     mode: 'out-in'
   },
   env: {
-    fbAPIKey: process.env.API_KEY,
-    test: process.env.TEST
+    apiKey: process.env.API_KEY
   }
-  // privateRuntimeConfig: {
-  //   fbAPIKey: process.env.FB_API_KEY
+  // publicRuntimeConfig: {
+  //   apiKey: process.env.API_KEY
   // }
   // router: {
   //   middleware: 'log'

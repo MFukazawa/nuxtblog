@@ -87,11 +87,11 @@ const createStore = () => {
       },
       authenticateUser({ commit, dispatch }, authData) {
         // sign in
-        let authUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + process.env.fbAPIKey
+        let authUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + process.env.apiKey
 
         // sign up
         if (!authData.isLogin) {
-          authUrl ='https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + process.env.fbAPIKey
+          authUrl ='https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + process.env.apiKey
         }
 
         return axios.post(authUrl, {
