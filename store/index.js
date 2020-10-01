@@ -100,8 +100,9 @@ const createStore = () => {
           returnSecureToken: true
         })
         .then(res => {
-          console.log(res)
           commit('setToken', res.data.idToken)
+          localStorage.setItem('token', res.data.idToken)
+          localStorage.setItem('tokenExpiration', new Date().getTime() + res.expiresIn * 1000)
           dispatch('setLogoutTimer', res.data.expiresIn * 1000)
         })
         .catch(e => console.log(e))
@@ -110,6 +111,17 @@ const createStore = () => {
         setTimeout(() => {
           commit('clearToken')
         }, duration)
+      },
+      initAuth({ commit, dispatch }) {
+        const token = localStorage.getItem('token')
+        const expirationDate = localStorage.getItem('tokenExpiration')
+
+        if (new Date().getTime() > +expirationDate || !token) {
+          return;
+        }
+
+        dispatch('setLogoutTimer', +expirationDate - new Date().getTime())
+        commit('setToken', token)
       }
     },
     getters: {

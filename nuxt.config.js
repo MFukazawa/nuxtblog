@@ -1,3 +1,4 @@
+require('dotenv').config()
 
 export default {
   /*
@@ -64,8 +65,12 @@ export default {
     mode: 'out-in'
   },
   env: {
-    fbAPIKey: 'AIzaSyCld58MHSTPWN3AmgNOqF9zl7IewI7ki2k'
+    fbAPIKey: process.env.API_KEY,
+    test: process.env.TEST
   }
+  // privateRuntimeConfig: {
+  //   fbAPIKey: process.env.FB_API_KEY
+  // }
   // router: {
   //   middleware: 'log'
   // }
