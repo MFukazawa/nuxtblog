@@ -27,6 +27,11 @@ export default {
     AppControlInput,
     AppButton
   },
+  asyncData({ $config }) {
+    return {
+      test: $config.test
+    }
+  },
   data() {
     return {
       isLogin: true,

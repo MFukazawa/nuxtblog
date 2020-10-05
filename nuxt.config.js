@@ -1,3 +1,4 @@
+import axios from 'axios'
 require('dotenv').config()
 const bodyParser = require('body-parser')
 
@@ -6,7 +7,7 @@ export default {
   ** Nuxt rendering mode
   ** See https://nuxtjs.org/api/configuration-mode
   */
-  mode: 'universal',
+  ssr: true,
   /*
   ** Nuxt target
   ** See https://nuxtjs.org/api/configuration-target
@@ -38,6 +39,7 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
+    '~/plugins/axios.js'
   ],
   /*
   ** Auto import components
@@ -61,7 +63,7 @@ export default {
   build: {
   },
   loading: { color: '#bada55', height: '4px', duration: 1000 },
-  transition: {
+  pageTransition: {
     name: 'fade',
     mode: 'out-in'
   },
@@ -70,6 +72,9 @@ export default {
   }
   // publicRuntimeConfig: {
   //   apiKey: process.env.API_KEY
+  // },
+  // privateRuntimeConfig: {
+  //   test: process.env.TEST
   // }
   // router: {
   //   middleware: 'log'
