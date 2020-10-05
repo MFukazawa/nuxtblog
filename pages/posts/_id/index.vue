@@ -3,7 +3,7 @@
     <section class="post">
       <h1 class="post-title">{{ loadedPost.title }}</h1>
       <div class="post-details">
-        <div class="post-detail">last updated: {{ loadedPost.updatedDate }}</div>
+        <div class="post-detail">last updated: {{ loadedPost.updatedDate | toJpDate }}</div>
         <div class="post-detail">author: {{ loadedPost.author }}</div>
       </div>
       <p class="post-content">{{ loadedPost.content }}</p>
@@ -11,7 +11,7 @@
     <section class="post-feedback">
       <p>
         let me know what you think of the post.
-        email <a href="mailto:feedback@micah.dev">me</a>
+        email <a href="mailto:micahfukazawa@gmail.com">me</a>
       </p>
     </section>
   </div>
@@ -29,44 +29,6 @@ export default {
         }
       })
       .catch(e => error(e))
-    // return new Promise((resolve, reject) => {
-    //   // reject(new Error())
-    //   setTimeout(() => {
-    //     resolve({
-    //       loadedPost: {
-    //         id: '1',
-    //         title: 'First Post (ID:' + params.id + ')',
-    //         previewText: 'This is our first post',
-    //         author: 'Micah',
-    //         updatedDate: new Date(),
-    //         content: 'Some dummy text which is not the preview text tho',
-    //         thumbnail: 'https://www.morganstanley.com/pub/content/dam/msdotcom/ideas/rise-of-the-tech-super-platforms/tw-rise-of-tech.jpg'
-    //         }
-    //       })
-    //     }, 1000)
-    //   }).then(data => {
-    //     return data
-    //   }).catch(e => {
-    //     error(e)
-    //   })
-    // try {
-    //   const wait = (timeToDelay) => new Promise((resolve) => setTimeout(resolve, timeToDelay))
-    //   await wait(1000)
-    //   return {
-    //     loadedPost: {
-    //         id: '1',
-    //         title: 'First Post (ID:' + params.id + ')',
-    //         previewText: 'This is our first post',
-    //         author: 'Micah',
-    //         updatedDate: new Date(),
-    //         content: 'Some dummy text which is not the preview text tho',
-    //         thumbnail: 'https://www.morganstanley.com/pub/content/dam/msdotcom/ideas/rise-of-the-tech-super-platforms/tw-rise-of-tech.jpg'
-    //     }
-    //   }
-    // }
-    // catch (err) {
-    //   error()
-    // }
   }
 }
 </script>
