@@ -40,7 +40,7 @@ export default {
   width: 90%;
   font-size: 1.5rem;
   color: black;
-  background-color: rgb(211, 211, 211);
+  background-color: snow;
   padding: 10px;
   border-radius: 10px;
   box-shadow: 3px 3px 3px black;

@@ -3,15 +3,15 @@
     <section class="post">
       <h1 class="post-title">{{ loadedPost.title }}</h1>
       <div class="post-details">
-        <div class="post-detail">last updated: {{ loadedPost.updatedDate | toJpDate }}</div>
-        <div class="post-detail">author: {{ loadedPost.author }}</div>
+        <div class="post-detail">Last Updated: {{ loadedPost.updatedDate | toJpDate }}</div>
+        <div class="post-detail">By: {{ loadedPost.author }}</div>
       </div>
       <p class="post-content">{{ loadedPost.content }}</p>
     </section>
     <section class="post-feedback">
       <p>
-        let me know what you think of the post.
-        email <a href="mailto:micahfukazawa@gmail.com">me</a>
+        Send me your thoughts!
+        Email <a href="mailto:micahfukazawa@gmail.com">me.</a>
       </p>
     </section>
   </div>
@@ -35,13 +35,25 @@ export default {
 
 <style scoped>
 .single-post-page {
-  padding: 30px;
+  padding: 30px 30px 0;
   text-align: center;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-height: 90vh;
 }
 
 .post {
   width: 100%;
+  flex: 1;
+}
+
+.post-feedback {
+  flex-shrink: 0;
+}
+
+.post-content {
+  margin: 20px auto;
 }
 
 @media (min-width: 768px) {

@@ -45,6 +45,7 @@ export default {
 
 <style scoped>
 .post-preview {
+  margin: 20px 0;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 2px 2px #ccc;

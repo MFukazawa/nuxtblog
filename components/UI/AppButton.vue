@@ -48,7 +48,7 @@ export default {
 
 .inverted:hover,
 .inverted:active {
-  color: #ccc;
+  color: slategray;
   background-color: white;
   border: 1px solid transparent;
 }
