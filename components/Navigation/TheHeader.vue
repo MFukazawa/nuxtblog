@@ -42,6 +42,7 @@ export default {
   justify-content: space-around;
   align-items: center;
   background-color: darkslategray;
+  box-shadow: 0 3px 5px #ccc;
   z-index: 100;
   box-sizing: border-box;
   padding: 0 20px;

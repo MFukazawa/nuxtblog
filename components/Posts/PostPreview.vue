@@ -46,6 +46,7 @@ export default {
 <style scoped>
 .post-preview {
   border: 1px solid #ccc;
+  border-radius: 5px;
   box-shadow: 0 2px 2px #ccc;
   background-color: white;
   width: 90%;

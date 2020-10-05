@@ -25,17 +25,19 @@ export default {
 <style scoped>
 .button {
   font: inherit;
-  background-color: black;
+  background-color: darkslategray;
   color: white;
-  padding: 5px;
+  padding: 10px;
   cursor: pointer;
-  border: 1px solid black;
+  border: 1px solid silver;
+  border-radius: 5px;
 }
 
 .button:hover,
 .button:active {
-  background-color: rgb(51, 51, 51);
-  border: 1px solid black;
+  /* background-color: rgb(51, 51, 51); */
+  border: 1px solid #bada55;
+  color: #bada55;
 }
 
 .inverted {
